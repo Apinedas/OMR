@@ -20,7 +20,7 @@ def rect_contour(contours):
     rect_con = []
     for i in contours:
         area = cv2.contourArea(i)
-        if area > 1000:
+        if area > 500000:
             peri = cv2.arcLength(i, True)
             approx = cv2.approxPolyDP(i, 0.02 * peri, True)
             if len(approx) == 4:
