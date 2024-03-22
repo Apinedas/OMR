@@ -1,10 +1,5 @@
 import numpy as np
 import cv2
-import pytesseract
-
-
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
-
 
 def split_boxes(img, num_cols, num_rows):
     cols = np.array_split(img, num_cols, axis=1)
@@ -45,13 +40,3 @@ def reorder(actual_points):
     new_points[1] = actual_points[np.argmin(diff)]
     new_points[2] = actual_points[np.argmax(diff)]
     return new_points
-
-
-def code_manipulation(img, code_points):
-    fixed_points = np.float32([[0, 0], [500, 0], [0, 500], [500, 500]])
-    custom_config = r'--oem 3 --psm 6'
-    matrix = cv2.getPerspectiveTransform(code_points, fixed_points)
-    img_warp_colored = cv2.warpPerspective(img, matrix, (500, 500))
-    img_warp_gray = cv2.cvtColor(img_warp_colored, cv2.COLOR_BGR2GRAY)
-    img_warp_gray = img_warp_gray[200:480, :]
-    print(pytesseract.image_to_string(img_warp_gray, config=custom_config))
